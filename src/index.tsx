@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 
 import * as esbuild from "esbuild-wasm";
+import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
+import { fetchPlugin } from "./plugins/fetch-plugin";
 
 const App = () => {
   const [inputText, setInputText] = useState("");
   const [outputText, setOutputText] = useState("");
-  let esbuildInitialized = false;
+  let esbuildInitialized = true;
 
   const startService = async () => {
+    esbuildInitialized = false;
     await esbuild.initialize({
       worker: true,
-      wasmURL: "/esbuild.wasm",
+      wasmURL: "esbuild.wasm",
     });
     esbuildInitialized = true;
   };
@@ -22,11 +25,22 @@ const App = () => {
 
   const onInputTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
     setInputText(e.target.value);
-  const onClick = () => {
+  const onClick = async () => {
     if (!esbuildInitialized) {
       return;
     }
-    console.log(3);
+    // const result = await esbuild.transform(inputText, {
+    //   loader: "tsx",
+    //   target: "es2015",
+    // });
+    const result = await esbuild.build({
+      entryPoints: ["index.js"],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin(), fetchPlugin(inputText)],
+      //   define: { 'process.env.NODE_ENV': '"production"', global: 'window' }
+    });
+    setOutputText(result.outputFiles[0].text);
   };
 
   return (
