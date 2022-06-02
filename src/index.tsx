@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import "react-app-polyfill/stable";
+import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
+import "bulmaswatch/superhero/bulmaswatch.min.css";
 
 import * as esbuild from "esbuild-wasm";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 import { fetchPlugin } from "./plugins/fetch-plugin";
+import Editor from "./components/code-editor.component";
 
 const App = () => {
+  const iframe = useRef<any>();
   const [inputText, setInputText] = useState("");
-  const [outputText, setOutputText] = useState("");
   let esbuildInitialized = true;
 
   const startService = async () => {
@@ -29,10 +32,9 @@ const App = () => {
     if (!esbuildInitialized) {
       return;
     }
-    // const result = await esbuild.transform(inputText, {
-    //   loader: "tsx",
-    //   target: "es2015",
-    // });
+    //reset the iframe every time in case the user does something like document.body.innerHTML = '';
+    iframe.current.srcdoc = html;
+
     const result = await esbuild.build({
       entryPoints: ["index.js"],
       bundle: true,
@@ -40,11 +42,36 @@ const App = () => {
       plugins: [unpkgPathPlugin(), fetchPlugin(inputText)],
       //   define: { 'process.env.NODE_ENV': '"production"', global: 'window' }
     });
-    setOutputText(result.outputFiles[0].text);
+    //setOutputText(result.outputFiles[0].text);
+    iframe.current.contentWindow.postMessage(result.outputFiles[0].text, "*");
   };
+
+  const html = `
+    <html>
+        <head></head>
+        <body>
+            <div id="root"></div>
+            <script>
+            window.addEventListener('message', (event) => {
+                try {
+                    eval(event.data);
+                } catch (err) {
+                    const root = document.querySelector('#root');
+                    root.innerHTML = '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
+                    console.error(err);
+                }
+            }, false);
+            </script>
+        </body>
+    </html>
+  `;
 
   return (
     <div>
+      <Editor
+        onChange={(value) => setInputText(value)}
+        initialValue="const b = 'peon';"
+      />
       <textarea
         placeholder="test"
         value={inputText}
@@ -53,7 +80,12 @@ const App = () => {
       <div>
         <button onClick={onClick}>Submit</button>
       </div>
-      <pre>{outputText}</pre>
+      <iframe
+        ref={iframe}
+        sandbox="allow-scripts"
+        srcDoc={html}
+        title="A frame that shows the output of the code we have written"
+      />
     </div>
   );
 };
@@ -67,4 +99,5 @@ const root = ReactDOM.createRoot(
 //     <App />
 //   </React.StrictMode>
 // );
+
 root.render(<App />);
