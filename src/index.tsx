@@ -1,13 +1,6 @@
 import ReactDOM from "react-dom/client";
 import "bulmaswatch/superhero/bulmaswatch.min.css";
-import CodeSection from "./components/code-section.component";
-import TextEditor from "./components/text-editor.component";
-
-const App = () => (
-  <div>
-    <TextEditor />
-  </div>
-);
+import App from "./app/App";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
