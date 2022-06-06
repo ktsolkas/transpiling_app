@@ -5,14 +5,14 @@ import {
 } from "@reduxjs/toolkit";
 import { Section, SectionTypes } from "../../common/Section";
 
-type SectionsState = {
-  ids: string[];
-  data: {
-    [id: string]: Section;
-  };
-};
+// type SectionsState = {
+//   ids: string[];
+//   data: {
+//     [id: string]: Section;
+//   };
+// };
 
-const sectionsAdapter = createEntityAdapter<SectionsState>({});
+const sectionsAdapter = createEntityAdapter<Section>({});
 
 const sectionsSlice = createSlice({
   name: "sections",
@@ -22,24 +22,59 @@ const sectionsSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; content: string }>
     ) {
-      state = state;
+      const { id, content } = action.payload;
+      const item = state.entities[id];
+      if (item) {
+        item.content = content;
+      }
+      //updateOne
     },
     deleteSection(state, action: PayloadAction<string>) {
-      state = state;
+      const index = state.ids.indexOf(action.payload);
+      if (index !== -1) {
+        state.ids = state.ids.splice(index, 1);
+        delete state.entities[action.payload];
+        //sectionsAdapter.removeOne
+      }
     },
     moveSection(
       state,
-      action: PayloadAction<{ id: string; direction: string }>
+      action: PayloadAction<{ id: string; direction: "up" | "down" }>
     ) {
-      state = state;
+      const { id, direction } = action.payload;
+      const index = state.ids.indexOf(id);
+      const newIndex = direction === "up" ? index - 1 : index + 1;
+      if (newIndex > 0 && newIndex < state.ids.length) {
+        state.ids[index] = state.ids[newIndex];
+        state.ids[newIndex] = id;
+      }
     },
     insertSectionAfter(
       state,
-      action: PayloadAction<{ id: string; type: SectionTypes }>
+      action: PayloadAction<{ id: string | null; type: SectionTypes }>
     ) {
-      state = state;
+      const { id, type } = action.payload;
+      const section: Section = {
+        id: randomId(),
+        type,
+        content: "",
+      };
+      state.entities[section.id] = section;
+      if (id) {
+        const index = state.ids.indexOf(id);
+        state.ids = state.ids.splice(index, 0, section.id);
+      } else {
+        state.ids.unshift(section.id);
+      }
     },
   },
 });
+
+const randomId = () => {
+  return Math.random().toString(36).slice(2, 5);
+};
+
+export const { updateSection, deleteSection, moveSection, insertSectionAfter } =
+  sectionsSlice.actions;
 
 export default sectionsSlice.reducer;
