@@ -33,7 +33,7 @@ const sectionsSlice = createSlice({
     deleteSection(state, action: PayloadAction<string>) {
       const index = state.ids.indexOf(action.payload);
       if (index !== -1) {
-        state.ids = state.ids.splice(index, 1);
+        state.ids.splice(index, 1);
         delete state.entities[action.payload];
         //sectionsAdapter.removeOne
       }
@@ -45,7 +45,7 @@ const sectionsSlice = createSlice({
       const { id, direction } = action.payload;
       const index = state.ids.indexOf(id);
       const newIndex = direction === "up" ? index - 1 : index + 1;
-      if (newIndex > 0 && newIndex < state.ids.length) {
+      if (newIndex > -1 && newIndex < state.ids.length) {
         state.ids[index] = state.ids[newIndex];
         state.ids[newIndex] = id;
       }

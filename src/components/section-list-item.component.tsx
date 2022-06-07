@@ -1,6 +1,8 @@
+import "./section-list-item.component.css";
 import { Section } from "../common/Section";
 import TextEditor from "./text-editor.component";
 import CodeSection from "./code-section.component";
+import ActionBar from "./action-bar.component";
 
 interface SectionListItemProps {
   section: Section;
@@ -15,7 +17,12 @@ const SectionListItem: React.FC<SectionListItemProps> = ({ section }) => {
     console.log(section, section.type);
     child = <CodeSection section={section} />;
   }
-  return <div>{child}</div>;
+  return (
+    <div className="section-list-item">
+      <ActionBar id={section.id} />
+      {child}
+    </div>
+  );
 };
 
 export default SectionListItem;
