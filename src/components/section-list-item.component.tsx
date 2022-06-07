@@ -7,11 +7,13 @@ interface SectionListItemProps {
 }
 
 const SectionListItem: React.FC<SectionListItemProps> = ({ section }) => {
-  let child: JSX.Element = <p></p>;
+  let child: JSX.Element;
   if (section.type === "text") {
-    child = <TextEditor />;
+    console.log(section, section.type);
+    child = <TextEditor section={section} />;
   } else {
-    child = <CodeSection />;
+    console.log(section, section.type);
+    child = <CodeSection section={section} />;
   }
   return <div>{child}</div>;
 };

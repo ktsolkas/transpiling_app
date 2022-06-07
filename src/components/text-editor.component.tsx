@@ -1,6 +1,9 @@
 import "./text-editor.component.css";
 import { useEffect, useRef, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
+import { Section } from "../common/Section";
+import { useAppDispatch } from "../app/store";
+import { updateSection } from "../features/sections/sectionsSlice";
 
 // export default function TextEditor() {
 //   const [value, setValue] = React.useState("**Hello world!!!**");
@@ -12,10 +15,14 @@ import MDEditor from "@uiw/react-md-editor";
 //   );
 // }
 
-const TextEditor: React.FC = () => {
+interface TextEditorProps {
+  section: Section;
+}
+
+const TextEditor: React.FC<TextEditorProps> = ({ section }) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [value, setValue] = useState("**Hello world!!!**");
   const [editMode, setEditMode] = useState(false);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const listener = (event: MouseEvent) => {
@@ -37,7 +44,12 @@ const TextEditor: React.FC = () => {
   if (editMode) {
     return (
       <div data-color-mode="dark" className="text-editor" ref={ref}>
-        <MDEditor value={value} onChange={(value) => setValue(value || "")} />
+        <MDEditor
+          value={section.content}
+          onChange={(value) =>
+            dispatch(updateSection({ id: section.id, content: value || "" }))
+          }
+        />
       </div>
     );
   }
@@ -48,7 +60,10 @@ const TextEditor: React.FC = () => {
       onClick={() => setEditMode(true)}
     >
       <div className="card-content">
-        <MDEditor.Markdown className="markdown" source={value} />
+        <MDEditor.Markdown
+          className="markdown"
+          source={section.content || "Click to edit"}
+        />
       </div>
     </div>
   );

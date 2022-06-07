@@ -5,22 +5,29 @@ import Editor from "./code-editor.component";
 import Preview from "./preview.component";
 import Resizable from "./resizable.component";
 import bundle from "../bundler/bundler";
+import { Section } from "../common/Section";
+import { useAppDispatch } from "../app/store";
+import { updateSection } from "../features/sections/sectionsSlice";
 
-const CodeSection = () => {
-  const [inputText, setInputText] = useState("");
+interface CodeSectionProps {
+  section: Section;
+}
+
+const CodeSection: React.FC<CodeSectionProps> = ({ section }) => {
   const [err, setErr] = useState("");
   const [code, setCode] = useState("");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const timer = setTimeout(async () => {
       console.log("test");
-      const output = await bundle(inputText);
+      const output = await bundle(section.content);
       setCode(output.code);
       setErr(output.err);
     }, 1500);
 
     return () => clearTimeout(timer);
-  }, [inputText]);
+  }, [section.content]);
 
   return (
     <Resizable
@@ -43,11 +50,13 @@ const CodeSection = () => {
           maxConstraints={[window.innerWidth * 0.8, Infinity]}
         >
           <Editor
-            onChange={(value) => setInputText(value)}
-            initialValue="const b = 'peon';"
+            onChange={(value) =>
+              dispatch(updateSection({ id: section.id, content: value }))
+            }
+            initialValue={section.content}
           />
         </Resizable>
-        <Preview code={code} err={err}/>
+        <Preview code={code} err={err} />
       </div>
     </Resizable>
   );
