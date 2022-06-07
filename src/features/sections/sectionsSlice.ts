@@ -3,6 +3,7 @@ import {
   createSlice,
   PayloadAction,
 } from "@reduxjs/toolkit";
+import { RootState } from "../../app/store";
 import { Section, SectionTypes } from "../../common/Section";
 
 // type SectionsState = {
@@ -71,7 +72,14 @@ const sectionsSlice = createSlice({
 });
 
 const randomId = () => {
-  return Math.random().toString(36).slice(2, 5);
+  return Math.random().toString(36).slice(2, 7);
+};
+
+export const selectSortedSections = (state: RootState) => {
+  const {
+    sections: { ids, entities },
+  } = state;
+  return ids.map((id) => entities[id]);
 };
 
 export const { updateSection, deleteSection, moveSection, insertSectionAfter } =

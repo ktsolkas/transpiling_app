@@ -1,8 +1,8 @@
-import TextEditor from "../components/text-editor.component";
+import SectionList from "../components/section-list.component";
 
 const App = () => (
   <div>
-    <TextEditor />
+    <SectionList />
   </div>
 );
 
