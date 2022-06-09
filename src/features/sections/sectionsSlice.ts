@@ -63,7 +63,7 @@ const sectionsSlice = createSlice({
       state.entities[section.id] = section;
       if (id) {
         const index = state.ids.indexOf(id);
-        state.ids = state.ids.splice(index, 0, section.id);
+        state.ids.splice(index + 1, 0, section.id);
       } else {
         state.ids.unshift(section.id);
       }

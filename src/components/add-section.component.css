@@ -1,0 +1,34 @@
+.add-section {
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.3s ease-in 0.2s;
+  margin: 10px 0;
+}
+
+.add-section:hover {
+  opacity: 1;
+}
+
+.add-section .divider {
+  position: absolute;
+  top: 50%;
+  bottom: 50%;
+  right: 2.5%;
+  left: 2.5%;
+  border-bottom: 1px solid gray;
+  width: 95%;
+  z-index: -1;
+}
+
+.add-section .add-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.add-section .add-buttons button {
+  margin: 0 40px;
+}
+
+.add-section.add-section-visible {
+  opacity: 1;
+}

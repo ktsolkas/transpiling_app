@@ -5,6 +5,7 @@ import { fetchPlugin } from "./plugins/fetch-plugin";
 let esbuildInitialized = false;
 const bundle = async (rawCode: string) => {
   if (!esbuildInitialized) {
+    console.log(1);
     await esbuild.initialize({
       worker: true,
       wasmURL: "esbuild.wasm",

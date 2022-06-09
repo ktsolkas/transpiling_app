@@ -34,6 +34,13 @@ const html = `
                     handleError(err);
                 }
             }, false);
+
+            const show = (value) => {
+              const node = document.createElement("div");
+              const textnode = document.createTextNode(value);
+              node.appendChild(textnode);
+              document.getElementById("root").appendChild(node);
+            }
             </script>
         </body>
     </html>

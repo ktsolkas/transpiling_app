@@ -8,26 +8,32 @@ import bundle from "../bundler/bundler";
 import { Section } from "../common/Section";
 import { useAppDispatch } from "../app/store";
 import { updateSection } from "../features/sections/sectionsSlice";
+import { useSelector } from "react-redux";
+import { selectBundleById } from "../features/bundles/bundlesSlice";
 
 interface CodeSectionProps {
   section: Section;
 }
 
 const CodeSection: React.FC<CodeSectionProps> = ({ section }) => {
-  const [err, setErr] = useState("");
-  const [code, setCode] = useState("");
+  // const [err, setErr] = useState("");
+  // const [code, setCode] = useState("");
+  //
+  const bundle = useSelector(selectBundleById)(section.id);
+  console.log(bundle);
+  //
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      console.log("test");
-      const output = await bundle(section.content);
-      setCode(output.code);
-      setErr(output.err);
-    }, 1500);
+  // useEffect(() => {
+  //   const timer = setTimeout(async () => {
+  //     console.log("test");
+  //     const output = await bundle(section.content);
+  //     setCode(output.code);
+  //     setErr(output.err);
+  //   }, 1500);
 
-    return () => clearTimeout(timer);
-  }, [section.content]);
+  //   return () => clearTimeout(timer);
+  // }, [section.content]);
 
   return (
     <Resizable
@@ -39,7 +45,13 @@ const CodeSection: React.FC<CodeSectionProps> = ({ section }) => {
       maxConstraints={[Infinity, window.innerHeight * 0.9]}
       minConstraints={[Infinity, 50]}
     >
-      <div style={{ height: "100%", display: "flex", flexDirection: "row" }}>
+      <div
+        style={{
+          height: "calc(100% - 10px)",
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
         <Resizable
           className="resize-x"
           width={window.innerWidth * 0.8}
@@ -56,7 +68,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({ section }) => {
             initialValue={section.content}
           />
         </Resizable>
-        <Preview code={code} err={err} />
+        <Preview code={bundle && bundle.code} err={bundle && bundle.err} />
       </div>
     </Resizable>
   );
