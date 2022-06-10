@@ -5,16 +5,6 @@ import { Section } from "../common/types/Section";
 import { useAppDispatch } from "../app/store";
 import { updateSection } from "../features/sections/sectionsSlice";
 
-// export default function TextEditor() {
-//   const [value, setValue] = React.useState("**Hello world!!!**");
-//   return (
-//     <div className="container">
-//       <MDEditor value={value} />
-//       <MDEditor.Markdown source={value} />
-//     </div>
-//   );
-// }
-
 interface TextEditorProps {
   section: Section;
 }
@@ -41,21 +31,17 @@ const TextEditor: React.FC<TextEditorProps> = ({ section }) => {
     };
   }, []);
 
+  const onChange = (value: string | undefined) => {
+    if (value) {
+      dispatch(
+        updateSection({ id: section.id, changes: { content: value || "" } })
+      );
+    }
+  };
   if (editMode) {
     return (
       <div data-color-mode="dark" className="text-editor" ref={ref}>
-        <MDEditor
-          value={section.content}
-          onChange={
-            (value) =>
-              dispatch(
-                updateSection({
-                  id: section.id,
-                  changes: { content: value || "" },
-                })
-              ) //content: value || ''
-          }
-        />
+        <MDEditor value={section.content} onChange={onChange} />
       </div>
     );
   }

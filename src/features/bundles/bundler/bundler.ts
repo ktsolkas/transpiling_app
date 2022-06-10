@@ -3,9 +3,8 @@ import { unpkgPathPlugin } from "./plugins/unpkgPathPlugin";
 import { fetchPlugin } from "./plugins/fetchPlugin";
 
 let esbuildInitialized = false;
-const bundle = async (rawCode: string) => {
+const bundle = async (input: string) => {
   if (!esbuildInitialized) {
-    console.log(1);
     await esbuild.initialize({
       worker: true,
       wasmURL: "esbuild.wasm",
@@ -18,7 +17,7 @@ const bundle = async (rawCode: string) => {
       entryPoints: ["index.js"],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
+      plugins: [unpkgPathPlugin(), fetchPlugin(input)],
     });
     return {
       code: result.outputFiles[0].text,

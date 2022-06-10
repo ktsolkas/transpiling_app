@@ -24,10 +24,10 @@ startAppListening({
   effect: async (action, listenerApi) => {
     const type =
       listenerApi.getState().sections.entities[action.payload.id]?.type;
-    console.log(type);
     if (type === "text") {
       return;
     }
+
     clearTimeout(timer);
     timer = setTimeout(async () => {
       const result = await bundle(action.payload.changes.content!);
