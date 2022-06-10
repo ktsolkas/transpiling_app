@@ -1,6 +1,6 @@
-import "./section-list-item.component.css";
+import "./SectionListItem.css";
 import { Section } from "../common/types/Section";
-import TextEditor from "./text-editor.component";
+import TextEditor from "./TextEditor";
 import CodeSection from "./CodeSection";
 import ActionBar from "./ActionBar";
 

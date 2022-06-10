@@ -12,6 +12,7 @@ const html = `
             <style> html { background-color: white; }</style>
         </head>
         <body>
+            <div id="print-container"></div>
             <div id="root"></div>
             <script>
             const handleError = (err) => {
@@ -38,7 +39,7 @@ const html = `
               const node = document.createElement("div");
               const textnode = document.createTextNode(value);
               node.appendChild(textnode);
-              document.getElementById("root").appendChild(node);
+              document.getElementById("print-container").appendChild(node);
             }
             </script>
         </body>

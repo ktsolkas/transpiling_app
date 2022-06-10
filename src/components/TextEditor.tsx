@@ -1,6 +1,7 @@
-import "./text-editor.component.css";
+import "./TextEditor.css";
 import { useEffect, useRef, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
+
 import { Section } from "../common/types/Section";
 import { useAppDispatch } from "../app/store";
 import { updateSection } from "../features/sections/sectionsSlice";
@@ -38,10 +39,15 @@ const TextEditor: React.FC<TextEditorProps> = ({ section }) => {
       );
     }
   };
+
   if (editMode) {
     return (
       <div data-color-mode="dark" className="text-editor" ref={ref}>
-        <MDEditor value={section.content} onChange={onChange} />
+        <MDEditor
+          value={section.content}
+          hideToolbar={true}
+          onChange={onChange}
+        />
       </div>
     );
   }
@@ -52,10 +58,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ section }) => {
       onClick={() => setEditMode(true)}
     >
       <div className="card-content">
-        <MDEditor.Markdown
-          className="markdown"
-          source={section.content || "Click to edit"}
-        />
+        <MDEditor.Markdown className="markdown" source={section.content} />
       </div>
     </div>
   );

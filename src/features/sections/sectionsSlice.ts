@@ -34,10 +34,31 @@ const sectionsSlice = createSlice({
       action: PayloadAction<{ id: string | null; type: SectionTypes }>
     ) {
       const { id, type } = action.payload;
+      let content = "";
+      if (type === "text") {
+        content = `# Markdown Editor\n*Click to edit*`;
+      } else {
+        content = `//Code Editor
+//Use 'printf' to write a message to the frame
+printf('Hello World!');
+printf(5 * 5);
+//Editor also supports importing any package from npm
+import React from 'react'
+import ReactDOM from "react-dom/client";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
+  <div style={{color: 'darkblue'}}>
+    <h1>Formatting your code with Prettier</h1>
+    <p>You can format your code by clicking on the button located at the top-right corner of the editor.</p>
+  </div>
+)`;
+      }
       const section: Section = {
         id: randomId(),
         type,
-        content: "",
+        content,
       };
       state.entities[section.id] = section;
       if (id) {
