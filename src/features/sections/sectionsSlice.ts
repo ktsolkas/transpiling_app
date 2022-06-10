@@ -3,15 +3,11 @@ import {
   createSlice,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
-import { Section, SectionTypes } from "../../common/Section";
 
-// type SectionsState = {
-//   ids: string[];
-//   data: {
-//     [id: string]: Section;
-//   };
-// };
+import { RootState } from "../../app/store";
+import { randomId } from "../../common/helpers/randomId";
+import { Direction } from "../../common/types/Direction";
+import { Section, SectionTypes } from "../../common/types/Section";
 
 const sectionsAdapter = createEntityAdapter<Section>({});
 
@@ -19,28 +15,11 @@ const sectionsSlice = createSlice({
   name: "sections",
   initialState: sectionsAdapter.getInitialState(),
   reducers: {
-    updateSection(
-      state,
-      action: PayloadAction<{ id: string; content: string }>
-    ) {
-      const { id, content } = action.payload;
-      const item = state.entities[id];
-      if (item) {
-        item.content = content;
-      }
-      //updateOne
-    },
-    deleteSection(state, action: PayloadAction<string>) {
-      const index = state.ids.indexOf(action.payload);
-      if (index !== -1) {
-        state.ids.splice(index, 1);
-        delete state.entities[action.payload];
-        //sectionsAdapter.removeOne
-      }
-    },
+    updateSection: sectionsAdapter.updateOne,
+    deleteSection: sectionsAdapter.removeOne,
     moveSection(
       state,
-      action: PayloadAction<{ id: string; direction: "up" | "down" }>
+      action: PayloadAction<{ id: string; direction: Direction }>
     ) {
       const { id, direction } = action.payload;
       const index = state.ids.indexOf(id);
@@ -70,10 +49,6 @@ const sectionsSlice = createSlice({
     },
   },
 });
-
-const randomId = () => {
-  return Math.random().toString(36).slice(2, 7);
-};
 
 export const selectSortedSections = (state: RootState) => {
   const {

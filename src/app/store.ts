@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
+
 import sectionsReducer from "../features/sections/sectionsSlice";
 import bundlesReducer from "../features/bundles/bundlesSlice";
-import { listenerMiddleware } from "./listenerMiddleware";
+import { bundleMiddleware } from "../features/bundles/bundleMiddleware";
 
 export const store = configureStore({
   reducer: {
@@ -10,7 +11,7 @@ export const store = configureStore({
     bundles: bundlesReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().prepend(listenerMiddleware.middleware),
+    getDefaultMiddleware().prepend(bundleMiddleware.middleware),
 });
 
 store.dispatch({

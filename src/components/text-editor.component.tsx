@@ -1,7 +1,7 @@
 import "./text-editor.component.css";
 import { useEffect, useRef, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
-import { Section } from "../common/Section";
+import { Section } from "../common/types/Section";
 import { useAppDispatch } from "../app/store";
 import { updateSection } from "../features/sections/sectionsSlice";
 
@@ -46,8 +46,14 @@ const TextEditor: React.FC<TextEditorProps> = ({ section }) => {
       <div data-color-mode="dark" className="text-editor" ref={ref}>
         <MDEditor
           value={section.content}
-          onChange={(value) =>
-            dispatch(updateSection({ id: section.id, content: value || "" }))
+          onChange={
+            (value) =>
+              dispatch(
+                updateSection({
+                  id: section.id,
+                  changes: { content: value || "" },
+                })
+              ) //content: value || ''
           }
         />
       </div>

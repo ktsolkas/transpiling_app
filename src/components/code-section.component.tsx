@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Editor from "./code-editor.component";
 import Preview from "./preview.component";
 import Resizable from "./resizable.component";
-import bundle from "../bundler/bundler";
-import { Section } from "../common/Section";
+import bundle from "../features/bundles/bundler/bundler";
+import { Section } from "../common/types/Section";
 import { useAppDispatch } from "../app/store";
 import { updateSection } from "../features/sections/sectionsSlice";
 import { useSelector } from "react-redux";
@@ -63,7 +63,9 @@ const CodeSection: React.FC<CodeSectionProps> = ({ section }) => {
         >
           <Editor
             onChange={(value) =>
-              dispatch(updateSection({ id: section.id, content: value }))
+              dispatch(
+                updateSection({ id: section.id, changes: { content: value } })
+              )
             }
             initialValue={section.content}
           />

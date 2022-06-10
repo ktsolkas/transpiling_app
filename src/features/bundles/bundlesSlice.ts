@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 import { RootState } from "../../app/store";
 
 type BundlesState = {
@@ -30,4 +31,5 @@ export const selectBundleById = (state: RootState) => (sectionId: string) =>
   state.bundles[sectionId];
 
 export const { bundleCreated } = bundlesSlice.actions;
+
 export default bundlesSlice.reducer;

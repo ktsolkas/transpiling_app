@@ -1,20 +1,17 @@
 import { createListenerMiddleware, addListener } from "@reduxjs/toolkit";
 import type { TypedStartListening, TypedAddListener } from "@reduxjs/toolkit";
 
-import { RootState, AppDispatch, store } from "./store";
-import {
-  insertSectionAfter,
-  updateSection,
-} from "../features/sections/sectionsSlice";
-import bundle from "../bundler/bundler";
-import { bundleCreated } from "../features/bundles/bundlesSlice";
+import bundle from "./bundler/bundler";
+import { updateSection } from "../sections/sectionsSlice";
+import { bundleCreated } from "./bundlesSlice";
+import type { RootState, AppDispatch } from "../../app/store";
 
-export const listenerMiddleware = createListenerMiddleware();
+export const bundleMiddleware = createListenerMiddleware();
 
 export type AppStartListening = TypedStartListening<RootState, AppDispatch>;
 
 export const startAppListening =
-  listenerMiddleware.startListening as AppStartListening;
+  bundleMiddleware.startListening as AppStartListening;
 
 export const addAppListener = addListener as TypedAddListener<
   RootState,
@@ -33,12 +30,10 @@ startAppListening({
     }
     clearTimeout(timer);
     timer = setTimeout(async () => {
-      console.log("start");
-      const result = await bundle(action.payload.content);
+      const result = await bundle(action.payload.changes.content!);
       listenerApi.dispatch(
-        bundleCreated({ bundle: result, sectionId: action.payload.id })
+        bundleCreated({ bundle: result, sectionId: "" + action.payload.id })
       );
-      console.log("end");
-    }, 1500);
+    }, 1000);
   },
 });

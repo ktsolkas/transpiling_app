@@ -1,5 +1,5 @@
 import "./section-list-item.component.css";
-import { Section } from "../common/Section";
+import { Section } from "../common/types/Section";
 import TextEditor from "./text-editor.component";
 import CodeSection from "./code-section.component";
 import ActionBar from "./action-bar.component";
