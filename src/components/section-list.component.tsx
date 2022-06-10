@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Fragment } from "react";
 import { selectSortedSections } from "../features/sections/sectionsSlice";
-import AddSection from "./add-section.component";
+import AddSection from "./AddSection";
 import SectionListItem from "./section-list-item.component";
 
 const SectionList: React.FC = () => {

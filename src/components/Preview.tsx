@@ -1,4 +1,4 @@
-import "./preview.component.css";
+import "./Preview.css";
 import { useEffect, useRef } from "react";
 
 interface PreviewProps {
@@ -6,7 +6,6 @@ interface PreviewProps {
   err: string;
 }
 
-//<style> html { background-color: white; }</style>
 const html = `
     <html>
         <head>
@@ -35,7 +34,7 @@ const html = `
                 }
             }, false);
 
-            const show = (value) => {
+            const printf = (value) => {
               const node = document.createElement("div");
               const textnode = document.createTextNode(value);
               node.appendChild(textnode);
@@ -50,8 +49,6 @@ const Preview: React.FC<PreviewProps> = ({ code, err }) => {
   const iframe = useRef<any>();
 
   useEffect(() => {
-    //reset the iframe every time in case the user does something like document.body.innerHTML = '';
-
     iframe.current.srcdoc = html;
     //sometimes the html does not have enough time to setup the event listener for the message so we wait a bit
     setTimeout(() => {

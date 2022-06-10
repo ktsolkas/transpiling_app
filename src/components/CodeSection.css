@@ -1,0 +1,10 @@
+.resize-x {
+  display: flex;
+  flex-direction: row;
+}
+
+.inner-section {
+  height: calc(100% - 10px);
+  display: flex;
+  flex-direction: row;
+}

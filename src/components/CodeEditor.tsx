@@ -1,4 +1,4 @@
-import "./code-editor.component.css";
+import "./CodeEditor.css";
 import { useRef } from "react";
 import MonacoEditor, { OnMount } from "@monaco-editor/react";
 import prettier from "prettier";
@@ -8,16 +8,16 @@ import { parse } from "@babel/parser";
 import MonacoJSXHighlighter from "monaco-jsx-highlighter";
 import { JSXTypes } from "monaco-jsx-highlighter";
 
-interface EditorProps {
+interface CodeEditorProps {
   initialValue: string;
   onChange: (value: string) => void;
 }
 
-const Editor: React.FC<EditorProps> = ({ initialValue, onChange }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   const editorRef = useRef<any>();
 
   const onEditorMount: OnMount = (editor, monaco) => {
-    editor.onDidChangeModelContent((e) => {
+    editor.onDidChangeModelContent((_) => {
       onChange(editor.getValue());
     });
     editor.getModel()?.updateOptions({ tabSize: 2 });
@@ -38,7 +38,6 @@ const Editor: React.FC<EditorProps> = ({ initialValue, onChange }) => {
   };
 
   const onFormat = () => {
-    console.log("xD", editorRef.current.getValue());
     const preFormatValue = editorRef.current.getValue();
     const formatted = prettier
       .format(preFormatValue, {
@@ -80,4 +79,4 @@ const Editor: React.FC<EditorProps> = ({ initialValue, onChange }) => {
   );
 };
 
-export default Editor;
+export default CodeEditor;
