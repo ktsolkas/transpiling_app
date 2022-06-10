@@ -2,6 +2,7 @@
   "name": "jbook",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://ktsolkas.github.io/transpiling_app/",
   "dependencies": {
     "@babel/parser": "^7.18.4",
     "@babel/traverse": "^7.18.2",
@@ -24,6 +25,7 @@
     "bulmaswatch": "^0.8.1",
     "esbuild-wasm": "^0.14.42",
     "eslint-config-react-app": "^7.0.1",
+    "gh-pages": "^4.0.0",
     "jsesc": "^3.0.2",
     "localforage": "^1.10.0",
     "monaco-editor": "^0.33.0",
@@ -43,6 +45,8 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
